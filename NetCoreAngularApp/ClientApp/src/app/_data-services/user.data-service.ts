@@ -3,9 +3,15 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class UserDataService {
+  module: string = "api/users";
+
   constructor(private http: HttpClient) {}
 
   get() {
-    return this.http.get("/api/users");
+    return this.http.get(this.module);
+  }
+
+  post(data) {
+    return this.http.post(this.module, data);
   }
 }
