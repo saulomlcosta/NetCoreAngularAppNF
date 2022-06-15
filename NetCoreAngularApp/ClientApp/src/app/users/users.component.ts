@@ -9,13 +9,14 @@ import { UserDataService } from "../_data-services/user.data-service";
 export class UsersComponent implements OnInit {
   users: any[];
   user: any = {};
+  userLogin: any = {};
+  userLogged: any = {};
   showList: boolean = true;
+  isAuthenticated: boolean = false;
 
   constructor(private userDataService: UserDataService) {}
 
-  ngOnInit() {
-    this.get();
-  }
+  ngOnInit() {}
 
   get() {
     this.userDataService.get().subscribe(
@@ -31,7 +32,7 @@ export class UsersComponent implements OnInit {
   }
 
   save() {
-   !this.user.id ? this.post() : this.put(); 
+    !this.user.id ? this.post() : this.put();
   }
 
   openDetails(user) {
@@ -91,5 +92,28 @@ export class UsersComponent implements OnInit {
         alert("Internal Error");
       }
     );
+  }
+
+  authenticate() {
+    this.userDataService.authenticate(this.userLogin).subscribe(
+      (data: any) => {
+        if (data.user) {
+          localStorage.setItem("user_logged", JSON.stringify(data));
+          this.get();
+          this.getUserData();
+        } else {
+          alert("User Invalid");
+        }
+      },
+      (error) => {
+        console.log(error);
+        alert("Internal Error");
+      }
+    );
+  }
+
+  getUserData() {
+    this.userLogged = JSON.parse(localStorage.getItem("user_logged"));
+    this.isAuthenticated = this.userLogged != null;
   }
 }

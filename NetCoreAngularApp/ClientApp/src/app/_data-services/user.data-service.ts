@@ -20,7 +20,10 @@ export class UserDataService {
   }
 
   delete(userId) {
-    debugger
-    return this.http.delete(this.module + '/' + userId);
+    return this.http.delete(this.module + "/" + userId);
+  }
+
+  authenticate(data) {
+    return this.http.post(this.module + "/authenticate", data);
   }
 }
