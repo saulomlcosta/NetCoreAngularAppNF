@@ -7,7 +7,7 @@ import { UserDataService } from "../_data-services/user.data-service";
   styleUrls: ["./users.component.css"],
 })
 export class UsersComponent implements OnInit {
-  users: any[];
+  users: any[] = [];
   user: any = {};
   userLogin: any = {};
   userLogged: any = {};
@@ -32,7 +32,11 @@ export class UsersComponent implements OnInit {
   }
 
   save() {
-    !this.user.id ? this.post() : this.put();
+    if (this.user.id) {
+      this.put();
+    } else {
+      this.post();
+    }
   }
 
   openDetails(user) {
@@ -76,10 +80,10 @@ export class UsersComponent implements OnInit {
     );
   }
 
-  delete(user) {
-    this.userDataService.delete(user.id).subscribe(
-      (userId) => {
-        if (userId) {
+  delete() {
+    this.userDataService.delete().subscribe(
+      (data) => {
+        if (data) {
           alert("User deleted successfully");
           this.get();
           this.user = {};
@@ -102,12 +106,12 @@ export class UsersComponent implements OnInit {
           this.get();
           this.getUserData();
         } else {
-          alert("User Invalid");
+          alert("User invalid.");
         }
       },
       (error) => {
         console.log(error);
-        alert("Internal Error");
+        alert("User invalid");
       }
     );
   }
